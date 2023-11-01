@@ -44,7 +44,7 @@
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,vue}": [
+    "*.{vue,ts,js}": [
       "eslint --fix"
     ]
   },
@@ -81,14 +81,13 @@
     "@uni-helper/uni-app-types": "^0.5.8",
     "@uni-helper/uni-ui-types": "^0.2.0",
     "@vue/eslint-config-prettier": "^7.0.0",
-    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/runtime-core": "^3.2.45",
     "@vue/tsconfig": "^0.4.0",
-    "eslint": "^8.22.0",
     "eslint": "^8.28.0",
     "eslint-plugin-vue": "^9.8.0",
     "husky": "^8.0.0",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^13.0.4",
     "miniprogram-api-typings": "^3.12.0",
     "prettier": "^2.8.0",
     "sass": "^1.56.1",
