@@ -56,11 +56,13 @@ interface Data<T> {
 }
 //  2.2添加类型，支持泛型
 export const http = <T>(options: UniApp.RequestOptions) => {
+  // 1． 返回 Promise 对象
   return new Promise<Data<T>>((resolve, reject) => {
     uni.request({
       ...options,
-      // 2.请求成功
+      // 响应成功
       success(res) {
+        // 状态码 2xx， axios 就是这样设计
         if (res.statusCode >= 200 && res.statusCode < 300) {
           // 2.1 提取核心数据 res.data
           resolve(res.data as Data<T>)
