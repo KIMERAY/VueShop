@@ -88,6 +88,9 @@ devDependencies:
   '@types/node':
     specifier: ^18.11.9
     version: 18.11.10
+  '@types/wechat-miniprogram':
+    specifier: ^3.4.5
+    version: 3.4.5
   '@uni-helper/uni-app-types':
     specifier: ^0.5.8
     version: 0.5.8(typescript@5.1.6)
@@ -3221,6 +3224,10 @@ packages:
 
   /@types/stack-utils@2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
+    dev: true
+
+  /@types/wechat-miniprogram@3.4.5:
+    resolution: {integrity: sha512-0VZk8XXfUxkxgy7F0ZGXZJPzJRfeZHBvg/Rmv3+X3StQLpYeGv4umasaR4fwd1B49nhz96sVAcAInl8mNUjSOw==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
