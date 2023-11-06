@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getHomeBannerAPI } from '@/services/home'
+import { getHomeBannerAPI, getHomeCategoryAPI } from '@/services/home'
 import type { BannerItem } from '@/types/home'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -13,9 +13,15 @@ const getHomeBannerData = async () => {
   bannerList.value = res.result
 }
 
+// 获取前台分类数据
+const getHomeCategoryData = async () => {
+  const res = await getHomeCategoryAPI()
+}
+
 // 页面加载
 onLoad(() => {
   getHomeBannerData()
+  getHomeCategoryData()
 })
 </script>
 
