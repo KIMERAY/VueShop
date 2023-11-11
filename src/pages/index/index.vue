@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/home'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import CustomNavbar from './components/CustomNavbar.vue'
@@ -9,6 +8,7 @@ import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
 import PageSkeleton from './components/PageSkeleton.vue'
 import { resolveDirective } from 'vue'
+import { useGuessList } from '@/composables'
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -39,14 +39,9 @@ onLoad(async () => {
   await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()]),
     (isLoading.value = false)
 })
-
-// 获取猜你喜欢组件实例
-const guessRef = ref<XtxGuessInstance>()
-// 滚动触底
-const onScrolltolower = () => {
-  // console.log('滚动触底啦~')
-  guessRef.value?.getMore()
-}
+// 猜你喜欢组合式函数调用
+const { guessRef, onScrolltolower } = useGuessList()
+// 当前下拉刷新状态
 const isTriggered = ref(false)
 // 自定义下拉刷新被触发
 const onRefresherrefresh = async () => {
