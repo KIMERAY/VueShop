@@ -40,10 +40,26 @@ export const deleteMemberCartAPI = (data: { ids: string[] }) => {
  * @param skuId SKUID
  * @param data selected 选中状态 count 商品数量
  */
-export const putMemberCartAPI = (skuId: string, data: { selected?: boolean; count?: number }) => {
+export const putMemberCarBySkuIdtAPI = (
+  skuId: string,
+  data: { selected?: boolean; count?: number },
+) => {
   return http({
     method: 'PUT',
     url: `/member/cart/${skuId}`,
+    data,
+  })
+}
+
+/**
+ * 购物车全选 / 取消全选
+ * @param data selected 是否选中
+ * @returns
+ */
+export const putMemberCartSelectedAPI = (data: { selected: boolean }) => {
+  return http({
+    method: 'PUT',
+    url: '/member/cart/selected',
     data,
   })
 }
