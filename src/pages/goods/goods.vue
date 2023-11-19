@@ -14,6 +14,8 @@ import type {
 } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 import { computed } from 'vue'
 import { useAddressStore } from '@/stores/modules/address'
+import type { AddressItem } from '@/types/address'
+import { getMemberAddressAPI } from '@/services/address'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -55,6 +57,7 @@ const getGoodsByIdData = async () => {
 // 页面加载
 onLoad(() => {
   getGoodsByIdData()
+  getMemberAddressData()
 })
 
 // 轮播图变化时
@@ -85,6 +88,20 @@ const openPopup = (name: typeof popupName.value) => {
   popupName.value = name
   popup.value?.open()
 }
+
+// 获取收货地址列表数据
+const addressList = ref<AddressItem[]>([])
+const getMemberAddressData = async () => {
+  const res = await getMemberAddressAPI()
+  addressList.value = res.result
+}
+
+const addressStore = useAddressStore()
+
+// 收货地址
+const selecteAddresss = computed(() => {
+  return addressStore.selectedAddresss || addressList.value?.find((v) => v.isDefault)
+})
 
 // 是否显示SKU组件
 const isShowSku = ref(false)
@@ -176,7 +193,9 @@ const onBuyNow = (ev: SkuPopupEvent) => {
         </view>
         <view @tap="openPopup('address')" class="item arrow">
           <text class="label">送至</text>
-          <text class="text ellipsis"> 请选择收获地址 </text>
+          <text class="text ellipsis">
+            {{ selecteAddresss?.fullLocation }} {{ selecteAddresss?.address }}
+          </text>
         </view>
         <view @tap="openPopup('service')" class="item arrow">
           <text class="label">服务</text>
@@ -250,7 +269,7 @@ const onBuyNow = (ev: SkuPopupEvent) => {
   </view>
 
   <!-- uni-ui弹出层 -->
-  <uni-popup ref="popup" type="bottom" background-color="#fff">
+  <uni-popup ref="popup" type="bottom" background-color="#fff" :list="addressList">
     <AddressPanel v-if="popupName === 'address'" @close="popup?.close()" />
     <ServicePanel v-if="popupName === 'service'" @close="popup?.close()" />
   </uni-popup>

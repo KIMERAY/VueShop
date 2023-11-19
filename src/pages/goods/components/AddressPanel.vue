@@ -1,8 +1,14 @@
 // AddressPanel.vue
 <script setup lang="ts">
+import type { AddressItem } from '@/types/address'
+
 // 子调父
 const emit = defineEmits<{
   (event: 'close'): void
+}>()
+// 接收地址参数
+defineProps<{
+  list: AddressItem[]
 }>()
 </script>
 
@@ -13,12 +19,13 @@ const emit = defineEmits<{
     <!-- 标题 -->
     <view class="title">配送至</view>
     <!-- 内容 -->
-    <view class="content">
-      <view class="item">
-        <view class="user">李明 13824686868</view>
-        <view class="address">北京市顺义区后沙峪地区安平北街6号院</view>
+    <view class="content" v-if="true">
+      <view class="item" v-for="item in list" :key="item.id">
+        <view class="user">{{ item.receiver }} {{ item.contact }}</view>
+        <view class="address">{{ item.fullLocation }} {{ item.address }}</view>
         <text class="icon icon-checked"></text>
       </view>
+
       <view class="item">
         <view class="user">王东 13824686868</view>
         <view class="address">北京市顺义区后沙峪地区安平北街6号院</view>
