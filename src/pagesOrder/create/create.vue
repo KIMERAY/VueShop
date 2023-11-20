@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { getMemberOrderPreAPI, getMemberOrderPreNowAPI, postMemberOrderAPI } from '@/services/order'
+import {
+  getMemberOrderPreAPI,
+  getMemberOrderPreNowAPI,
+  postMemberOrderAPI,
+  getReorderMemberOrderAPI,
+} from '@/services/order'
 import { onLoad } from '@dcloudio/uni-app'
 import type { OrderPreResult } from '@/types/order'
 import { computed, ref } from 'vue'
@@ -26,6 +31,7 @@ const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
 
 // 页面参数
 const query = defineProps<{
+  id?: string
   skuId?: string
   count?: string
 }>()
@@ -33,15 +39,20 @@ const query = defineProps<{
 // 获取订单信息
 const orderPre = ref<OrderPreResult>()
 const getMemberOrderPreData = async () => {
-  if (query.count && query.skuId) {
-    const res = await getMemberOrderPreNowAPI({
-      count: query.count,
-      skuId: query.skuId,
-    })
+  if (query.id) {
+    const res = await getReorderMemberOrderAPI(query.id)
     orderPre.value = res.result
   } else {
-    const res = await getMemberOrderPreAPI()
-    orderPre.value = res.result
+    if (query.count && query.skuId) {
+      const res = await getMemberOrderPreNowAPI({
+        count: query.count,
+        skuId: query.skuId,
+      })
+      orderPre.value = res.result
+    } else {
+      const res = await getMemberOrderPreAPI()
+      orderPre.value = res.result
+    }
   }
 }
 onLoad(() => {
