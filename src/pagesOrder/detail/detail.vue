@@ -5,6 +5,7 @@ import { OrderState, orderStateList } from '@/services/constants'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import type { OrderResult } from '@/types/order'
 import { ref } from 'vue'
+import PageSkeleton from './compponents/PageSkeleton.vue'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -75,8 +76,10 @@ const getMemberOrderByIdData = async () => {
   order.value = res.result
 }
 
-onLoad(() => {
-  getMemberOrderByIdData()
+const isFinish = ref(false)
+onLoad(async () => {
+  await Promise.all([getMemberOrderByIdData()])
+  isFinish.value = true
 })
 </script>
 
@@ -94,7 +97,13 @@ onLoad(() => {
       <view class="title">订单详情</view>
     </view>
   </view>
-  <scroll-view scroll-y class="viewport" id="scroller" @scrolltolower="onScrolltolower">
+  <scroll-view
+    v-if="isFinish"
+    scroll-y
+    class="viewport"
+    id="scroller"
+    @scrolltolower="onScrolltolower"
+  >
     <template v-if="order">
       <!-- 订单状态 -->
       <view class="overview" :style="{ paddingTop: safeAreaInsets!.top + 20 + 'px' }">
