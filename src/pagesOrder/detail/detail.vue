@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useGuessList } from '@/composables'
-import { getMemberOrderByIdAPI, getMemberOrderConsignmentByIdAPI } from '@/services/order'
+import {
+  getMemberOrderByIdAPI,
+  getMemberOrderConsignmentByIdAPI,
+  putMemberOrderReceiptByIdAPI,
+} from '@/services/order'
 import { OrderState, orderStateList } from '@/services/constants'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import type { OrderResult } from '@/types/order'
@@ -114,6 +118,23 @@ const onOrderSend = async () => {
     // 主动更新订单状态
     order.value!.orderState = OrderState.DaiShouHuo
   }
+}
+
+// 确认收货
+const onOrderConfirm = () => {
+  // 二次确认弹窗
+  uni.showModal({
+    title: '提示',
+    content: '为保障您的权益，请收到货并确认无误后，再确认收货',
+    showCancel: true,
+    success: async (success) => {
+      if (success.confirm) {
+        const res = await putMemberOrderReceiptByIdAPI(query.id)
+        // 更新订单状态
+        order.value = res.result
+      }
+    },
+  })
 }
 </script>
 
@@ -264,7 +285,7 @@ const onOrderSend = async () => {
       <view class="toolbar-height" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }"></view>
       <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
         <!-- 待付款状态:展示支付按钮 -->
-        <template v-if="true">
+        <template v-if="order.orderState != OrderState.DaiShouHuo">
           <view class="button primary"> 去支付 </view>
           <view class="button" @tap="popup?.open?.()"> 取消订单 </view>
         </template>
@@ -278,7 +299,7 @@ const onOrderSend = async () => {
             再次购买
           </navigator>
           <!-- 待收货状态: 展示确认收货 -->
-          <view class="button primary"> 确认收货 </view>
+          <view class="button primary" @tap="onOrderConfirm"> 确认收货 </view>
           <!-- 待评价状态: 展示去评价 -->
           <view class="button"> 去评价 </view>
           <!-- 待评价/已完成/已取消 状态: 展示删除订单 -->
